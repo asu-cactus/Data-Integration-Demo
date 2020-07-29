@@ -131,7 +131,6 @@ def train(train_x, train_y, test_x, test_y,vocab_size,
             '''
 
 
-
             true_onehot_labels = []
             predicted_onehot_scores = []
 
@@ -156,9 +155,7 @@ def train(train_x, train_y, test_x, test_y,vocab_size,
 
                 for i in batch_predicted_onehot_labels:
                     predicted_onehot_labels_t2.append(i)
-                #print('score',scores[:2])
-                #print('predicted label',predicted_onehot_labels_t2[:2])
-                #print('true label',true_onehot_labels[:2])
+
                 eval_loss = eval_loss + cur_loss
                 eval_counter = eval_counter + 1
 
@@ -170,11 +167,7 @@ def train(train_x, train_y, test_x, test_y,vocab_size,
 
             accuracy = accuracy_score(np.array(true_onehot_labels), np.array(predicted_onehot_labels_t2))
 
-
-
-
             return eval_loss, accuracy ,ave_precision_score
-
 
 
         # Training loop
@@ -220,11 +213,8 @@ if __name__ == "__main__":
     start = time.time()
 
     parser = argparse.ArgumentParser()
-
     parser.add_argument("--summary_dir", type=str, default="summary_classifier", help="summary dir.")
-
     args = parser.parse_args()
-
 
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
@@ -232,10 +222,7 @@ if __name__ == "__main__":
     t = time.time()
 
     print("Preprocessing dataset..")
-
-
     print('data preprocessing time: {}'.format(time.time()-t))
-
 
     vocab_size, embedding_size, embedding_matrix = load_word2vec_matrix(MODEL_PATH)
     print('vocabulary size',vocab_size,embedding_size)
@@ -250,10 +237,7 @@ if __name__ == "__main__":
     assert len(test_x) == len(test_y)
     print("length of train_x: {}, length of test_x: {}".format(len(train_x), len(test_x)))
 
-
     train(train_x, train_y, test_x, test_y,vocab_size,embedding_size, embedding_matrix,trainset_embedding_matrix,args)
 
-
     print("total time: {}".format(time.time() - start))
-
 

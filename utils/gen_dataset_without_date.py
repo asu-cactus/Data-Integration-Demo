@@ -167,7 +167,7 @@ if __name__ == "__main__":
     dataset2_path = "../dataset/source_dataset/Global_Mobility_Report.csv"
 
     dataset_path = gen_training_dataset(dataset1_path,dataset2_path)
-    #
-    # data = pd.read_csv(dataset_path, sep=',', header=0, low_memory=False)
-    # related_corpus = gen_related_word_corpus(data)
-    # gen_training_dataset(dataset_path, related_corpus)
+
+    data = pd.read_csv(dataset_path, sep=',', header=0, low_memory=False)
+    related_corpus = gen_related_word_corpus(data)
+    gen_training_dataset(dataset_path, related_corpus)

@@ -4,6 +4,9 @@ import json
 import urllib.parse
 import urllib.request
 import fasttext
+import pandas as pd
+
+
 
 from utils.data_utils import clean_str
 from nltk.tokenize import word_tokenize
@@ -11,11 +14,15 @@ from nltk.tokenize import word_tokenize
 
 
 
-# dataset_path = "dataset/training_without_date.csv"
+
 
 
 def gen_date_corpus():
+    '''
+    generate similar date format corpus
 
+    :return: date (type: list)
+    '''
     date = []
 
     all_month = ['January','February','March', 'April','May','June',
@@ -58,9 +65,15 @@ def gen_date_corpus():
 
 
 def gen_related_word_corpus(data):
+    '''
+    using Google KG API to query similar word
+
+    :param data: original dataset
+    :return: related_corpus(type:dictionary)
+    '''
 
 
-    # data = pd.read_csv(dataset_path,sep=',',header=0, low_memory=False)
+
     original_corpus = data['value']
 
     related_corpus = {}
@@ -104,14 +117,20 @@ def gen_related_word_corpus(data):
 
 
 def gen_word_embedding_dataset(data):
+    '''
+    generate the word corpus used for word embedding training
+
+    :param data: original dataset
+    :return: word corpus path
+    '''
 
     with open("dataset/dict/related_corpus.json","r") as f:
         related_corpus = json.load(f)
 
 
     # write word embedding training dataset
-    embedding_model_path = 'dataset/new_corpus_without_date'
-    f=open(embedding_model_path, "w",encoding='utf-8')
+    embedding_corpus_path = 'dataset/new_corpus_without_date'
+    f=open(embedding_corpus_path, "w",encoding='utf-8')
 
     # data = pd.read_csv(dataset_path,sep=',',header=0, low_memory=False)
     corpus = data['value']
@@ -134,83 +153,29 @@ def gen_word_embedding_dataset(data):
             f.write(str(new_row))
             f.write('\n')
 
-    return embedding_model_path
+    return embedding_corpus_path
 
 
-def train_embedding_model(embedding_model_path):
-    model = fasttext.train_unsupervised(embedding_model_path, 'skipgram',
+def train_embedding_model(embedding_corpus_path):
+    '''
+    train word embedding model using FastText
+
+    :param embedding_model_path:
+    :return: word embedding model (type: binary file)
+    '''
+    model = fasttext.train_unsupervised(embedding_corpus_path, 'skipgram',
                                         epoch=10, minn=2, maxn=5, dim=150, thread=16)
     model.save_model('pretrained_embedding_model/new_corpus_without_date.bin')
 
-#
-# test_file_path  = "dataset/training_without_date.csv"
-#
-# test_data = pd.read_csv(test_file_path,sep=',',header=0, low_memory=False)
-#
-# new_data = []
-# new_value = []
-# for value, label1, label2 in zip(test_data['value'], test_data['label1'],
-#                                  test_data['label2']):
-#     new_test_row = ''
-#     row = value.split(',')
-#     for words in row:
-#         if row.index(words) != 5 and row.index(words) != 1 and row.index(words) != 3:
-#             for word in word_tokenize(clean_str(words)):
-#                 # if word in related_corpus:
-#
-#                 relate = related_corpus[word]
-#                 new_test_word = str(random.sample(relate,1))
-#                 new_test_row += new_test_word+(',')
-#
-#         else:
-#
-#             new_test_row += words+(',')
-#
-#     new_test_row = re.sub(r"[!_?\'\"]", " ", new_test_row)
-#     new_test_row = re.sub(r"!?\'\"]", " ", new_test_row)
-#     new_test_row = re.sub(r"\s{2,}", " ", new_test_row)
-#     new_test_row = new_test_row.replace('[', ' ')
-#     new_test_row = new_test_row.replace(']', ' ')
-#
-#     new_data.append({'value': new_test_row, 'label1': label1, 'label2': label2,})
-#
-# df2 = pd.DataFrame(new_data,columns=['value','label1','label2'])
-# df2.to_csv('./dataset/testing_without_date.csv',index=False)
-#
+
+if __name__ == "__main__":
+    dataset_path = "dataset/training_without_date.csv"
+    data = pd.read_csv(dataset_path,sep=',',header=0, low_memory=False)
 
 
+    date_corpus = gen_date_corpus()
+    related_word_corpus = gen_related_word_corpus(data)
+    embedding_model_path = gen_word_embedding_dataset(data)
 
-#
-#
-#
-# query = 'latitude'
-# service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
-# params = {
-#     'query': query,
-#     'limit': 3,
-#     'indent': True,
-#     'key': 'AIzaSyBjLdpfLQyG8yKPTCtj3WMDrNEJ8clakSU',
-# }
-# url = service_url + '?' + urllib.parse.urlencode(params)
-# response = json.loads(urllib.request.urlopen(url).read())
-# for element in response['itemListElement']:
-#    print(element['result']['name'] + ' (' + str(element['resultScore']) + ')')
-#
-
-# import http.client, urllib.parse
-# import json
-#
-# subscriptionKey = '9de98e9361c84843a72599eb8f4b9a45'
-# host = 'api.cognitive.microsoft.com'
-# path = '/bing/v7.0/entities'
-# mkt = 'en-US'
-# query = 'United States'
-#
-# params = '?mkt=' + mkt + '&q=' + urllib.parse.quote (query)
-#
-# headers = {'Ocp-Apim-Subscription-Key': subscriptionKey}
-# conn = http.client.HTTPSConnection (host)
-# conn.request("GET", path + params, None, headers)
-# response = conn.getresponse ()
-# result = response.read()
-# print (json.dumps(json.loads(result), indent=4))
+    print('training word embedding model')
+    train_embedding_model(embedding_model_path)

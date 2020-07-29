@@ -106,7 +106,6 @@ def train_data_word2vec(TRAIN_PATH,num_class,vocab_size, embed_size, embedding_m
         content_index_list.append(result)
 
 
-    print('flag',count)
     label1 = df["label1"]
     label2 = df['label2']
     # label3 = df['label3']
@@ -116,11 +115,6 @@ def train_data_word2vec(TRAIN_PATH,num_class,vocab_size, embed_size, embedding_m
         label = [l1, l2]
 
         onehot_labels_list.append(create_onehot_labels(label, num_class))
-
-
-    print('length of trainset_matr',len(trainset_embedding_matrix))
-    print('oov word',oov_word)
-    print('x',content_index_list[:10])
 
     with open('../dataset/embedding_matrix/trainset_embedding_matrix.npy', 'wb') as f:
         np.save(f, trainset_embedding_matrix)
@@ -150,10 +144,8 @@ def test_data_word2vec(TEST_PATH,num_class,vocab_size,embedding_model,oov_word):
     whole_vocab ={}
     whole_vocab.update(vocab)
     whole_vocab.update(oov_vocab)
-    print('len of whole voc',len(whole_vocab))
 
     df = pd.read_csv(TEST_PATH, names=[ "content", "label1", "label2"], sep=',', header=0)
-
 
     content_index_list = []
     onehot_labels_list = []
@@ -186,13 +178,6 @@ def test_data_word2vec(TEST_PATH,num_class,vocab_size,embedding_model,oov_word):
 
         onehot_labels_list.append(create_onehot_labels(label, num_class))
 
-    print('length of oov words in test set',len(oov_list))
-    print('oov word',oov_list)
-
-    print('test_x', content_index_list[:10])
-
-
-
     return content_index_list, onehot_labels_list
 
 
@@ -212,9 +197,6 @@ def load_word2vec_matrix(embedding_model):
     model = fasttext.load_model(embedding_model)
     vocab_size = (model.get_output_matrix()).shape[0]
     embedding_size = model.get_dimension
-    print('vocabulary size',vocab_size)
-
-
 
     vocab = dict([(word, model.get_word_id(word)) for word in model.get_words()])
 
@@ -250,71 +232,5 @@ def batch_iter(inputs, outputs, batch_size, num_epochs):
             yield inputs[start_index:end_index], outputs[start_index:end_index]
 
 
-
-
-if __name__ == "__main__":
-
-
-    # #word2vec_model = gensim.models.KeyedVectors.load_word2vec_format('dataset/GoogleNews-vectors-negative300.bin', binary=True)
-    # word2vec_model = word2vec.Word2Vec.load('dataset/word2vec_100.model')
-    # content_index_list, onehot_labels_list = data_word2vec('train', 460, word2vec_model)
-    # pad_seq = pad_sequences(content_index_list,maxlen=10, value=0.)
-    # print(len(content_index_list))
-    # print(content_index_list[:10])
-    # print(pad_seq[:10])
-    # vocab_size, embedding_size, embedding_matrix = load_word2vec_matrix(MODEL_PATH)
-    # print(vocab_size,embedding_size)
-    # print(embedding_matrix.shape)
-
-
-
-    #
-    # model = fasttext.load_model("dataset/wiki.en.bin")
-    #
-    # print(model.get_subwords('2020'))
-    # print(model.get_word_vector('20'))
-    # print(model.get_word_vector('20>'))
-    # print('cos',cos_sim(model.get_word_vector('country'),model.get_sentence_vector('nationality')))
-    #
-    # fr = open('dataset/new_corpus_without_date&add_change', "r")
-    # fw = open('dataset/new_corpus_without_date&add_change_v2', "w",encoding='utf-8')
-    #
-    #
-    # for line in fr.readlines():
-    #     new_line = re.sub(r"[,!?\'\"]", " ", line)
-    #     new_line = re.sub(r"\s{2,}", " ", new_line)
-    #     new_line = new_line.replace('[','')
-    #     new_line = new_line.replace(']', '')
-    #
-    #     new_line = new_line.strip().lower()
-    #
-    #     fw.write(new_line)
-    #     fw.write('\n')
-
-    # model = fasttext.train_unsupervised('dataset/new_corpus_without_date','skipgram',epoch = 10,minn=2, maxn=5, dim=150,thread=16)
-    # model.save_model('pretrained_embedding_model/new_corpus_without_date.bin')
-    l_model = fasttext.load_model("../pretrained_embedding_model/new_corpus_without_date.bin")
-    print(l_model.get_nearest_neighbors('country',10))
-    # print(model.get_words('region'))
-
-    # dist = np.sqrt(np.sum(np.square(model.get_word_vector('2020'),model.get_word_vector('20'))))
-    # print('eu distance', dist)
-    # # print(model.get_nearest_neighbors('list'))
-    # # print(model.get_word_vector('the'))
-    # print(model.get_word_id('2009'))
-    # # print(len(model.get_words()),len(model.get_labels()))
-    # print(model.get_word_vector('20'))
-    # # word = model.get_word_vector('threshholds')
-    # # # print(word)
-    # word2vec_model = FastText.load_fasttext_format('dataset/wiki.en')
-    # # print(model.get_word_vector('US'))
-    # word2vec_model = KeyedVectors.load_word2vec_format('dataset/wiki.en.vec')
-    #
-    # print('111',word2vec_model.get_nearest_neighbors('confirmed'))
-    # #print(model.wv.most_similar('United States'))
-    # vocab_size, embedding_size, embedding_matrix = load_word2vec_matrix("dataset/wiki.en.bin")
-    # content_index_list, onehot_labels_list, trainset_embedding_matrix =  data_word2vec('train',460,"dataset/wiki.en.bin")
-    # print(embedding_matrix.shape,type(embedding_matrix))
-    # print(trainset_embedding_matrix.shape)
 
 
