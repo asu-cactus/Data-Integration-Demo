@@ -58,15 +58,13 @@ Customized Corpus using data table based words:   vocabulary size = 535
 
 
 
-### Word CNN
+## Usage
 
-*# todo* 
+### 
 
+Three models are separated into three notebook files 
 
-
-
-
-
+you can run the notebook file on Google Colab 
 
 
 
