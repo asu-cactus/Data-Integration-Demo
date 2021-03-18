@@ -32,7 +32,7 @@ Global_Mobility_Report.csv  https://www.google.com/covid19/mobility/
 
 | Number of Rows | Number of Columns(Attributes)                                |
 | -------------- | ------------------------------------------------------------ |
-| 28751          | 5                                                                                                                           (country_region, state_subregion, date, confirmed_case, transit_percentage) |
+| 28751          | 12                                                                                                                         9 |
 
 
 
@@ -56,15 +56,16 @@ Pretrained Corpus using Wikipedia English content: vocabulary size = 2519370
 
 Customized Corpus using data table based words:   vocabulary size = 535
 
-
+### Transformer
+Vanilla transformer model
 
 ## Usage
 
-### 
 
-Three models are separated into three notebook files 
 
-you can run the notebook file on Google Colab 
+models are separated into three notebook files 
+
+Simply run the notebook file on Google Colab or your local environment
 
 
 
