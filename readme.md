@@ -30,9 +30,9 @@ Global_Mobility_Report.csv  https://www.google.com/covid19/mobility/
 
 
 
-| Number of Rows | Number of Columns(Attributes)                                |
-| -------------- | ------------------------------------------------------------ |
-| 28751          | 12                                                                                                                         9 |
+| Number of Rows | Number of Columns(Attributes) |
+| -------------- | ----------------------------- |
+| 28751          | 12                            |
 
 
 
