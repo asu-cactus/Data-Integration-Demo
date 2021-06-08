@@ -1,73 +1,68 @@
 # Data Integration Demo 
 
-### Data Integration for Fast-Evolving Data Sources 
+### Data Integration for Data with Schema Changes 
 
-1. Dimension Pivoting Changes
-2. Attribute Name Changes
-3. Attribute Value Changes
+1.  Attribute Renaming
+2.  Cell Value Reformatting
+3.  Key Expansion
+4.  Key Order Changing  
 
-## Environment Requirement
 
-python 3.6+
 
-TensorFlow 1.14
+### Table Cell Position Prediction Using Sequence/Language Model
 
-nltk
-
-FastText
+1.  Column (attribute) prediction 
+2.  Key index prediction
+3.  Aggregation mode prediction (only apply to covid-19 dataset)
 
 
 
 ## Dataset
 
-###### two tables has similar but not same table schema, also with frequent schema evolving.
+#### Covid-19 scenario
+
+- Covid-19 dataset  https://github.com/CSSEGISandData/COVID-19
+
+- Google Mobility Report dataset  https://www.google.com/covid19/mobility/
 
 
 
-time_series_19-covid-Confirmed.csv  https://github.com/CSSEGISandData/COVID-19
+#### Machine log scenario 
 
-Global_Mobility_Report.csv  https://www.google.com/covid19/mobility/
-
-
-
-| Number of Rows | Number of Columns(Attributes) |
-| -------------- | ----------------------------- |
-| 28751          | 12                            |
+- Linux log data
+- macOS log data
+- Android log data
 
 
 
 
+## Model
 
-## Model Architecture
-
-### Word RNN
-
-Pretrained Embedding Layer + bi-LSTM + FC
-
-| Embedding Layer | bi-LSTM | Fully Connected Layer |
-| --------------- | ------- | --------------------- |
-| Vocabulary Size | 512     | 256                   |
+- [Pretrained Word Embedding (fastText) + Bi-LSTM](https://github.com/asu-cactus/Data-Integration-Demo/blob/master/Bi_LSTM/)
+- [Pretrained Word Tokenizer (BERT Tokenizer) + Encoder-only Transfomer](https://github.com/asu-cactus/Data-Integration-Demo/blob/master/Transformer/)
 
 
-
-##### Word Embedding Using FastText
-
-Pretrained Corpus using Wikipedia English content: vocabulary size = 2519370
-
-Customized Corpus using data table based words:   vocabulary size = 535
-
-### Transformer
-Vanilla transformer model
 
 ## Usage
 
+Dataset:
+
+[Github Repository](https://github.com/asu-cactus/Data-Integration-Demo/blob/master/Data_Integration_Dataset/)
+
+[Google Drive](https://drive.google.com/drive/folders/19oLAKktjI0uk8v4lcdBTnRBTyqN-tGeR?usp=sharing)
 
 
-models are separated into three notebook files 
 
-Simply run the notebook file on Google Colab or your local environment
+Download dataset: 
+
+```python
+import gdown
+gdown.download('https://drive.google.com/drive/folders/19oLAKktjI0uk8v4lcdBTnRBTyqN-tGeR', output=None, quiet=False)
+```
 
 
+
+Run with [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb?utm_source=scs-index) or local Jupyter Notebook.
 
 
 
